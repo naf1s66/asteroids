@@ -1,14 +1,14 @@
+import asyncio
 from asteroid import Asteroid
 import pygame
 from constants import *
 from logger import log_state, log_event
 from player import Player
 from asteroidfield import AsteroidField
-import sys
 from circleshape import CircleShape
 from shot import Shot
 
-def main():
+async def main():
     pygame.init()
     clock = pygame.time.Clock()
     dt = 0
@@ -36,7 +36,7 @@ def main():
             if  player.collides_with(asteroid):
                 log_event("player_hit")
                 print("Game Over!")
-                sys.exit()
+                return
         for asteroid in asteroids:
             for shot in shots:
                 if shot.collides_with(asteroid):
@@ -45,6 +45,7 @@ def main():
                     shot.kill()
         pygame.display.flip()
         dt = clock.tick(60) / 1000
+        await asyncio.sleep(0)
 
     # print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     # print(f"Screen width: {SCREEN_WIDTH}")
@@ -52,4 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
